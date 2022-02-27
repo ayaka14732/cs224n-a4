@@ -10,6 +10,7 @@ Vera Lin <veralin@stanford.edu>
 """
 
 import math
+from itertools import repeat
 from typing import List
 
 import numpy as np
@@ -31,12 +32,10 @@ def pad_sents(sents, pad_token):
         than the max length sentence are padded out with the pad_token, such that
         each sentences in the batch now has equal length.
     """
-    sents_padded = []
 
     ### YOUR CODE HERE (~6 Lines)
-
-
-
+    max_len = max(map(len, sents))
+    sents_padded = [[*sent, *repeat(pad_token, max_len - len(sent))] for sent in sents]
     ### END YOUR CODE
 
     return sents_padded
