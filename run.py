@@ -60,6 +60,7 @@ from vocab import Vocab, VocabEntry
 import torch
 import torch.nn.utils
 from torch.utils.tensorboard import SummaryWriter
+import torch_xla.core.xla_model as xm
 
 
 def evaluate_ppl(model, dev_data, batch_size=32):
@@ -156,7 +157,7 @@ def train(args: Dict):
     vocab_mask = torch.ones(len(vocab.tgt))
     vocab_mask[vocab.tgt['<pad>']] = 0
 
-    device = torch.device("cuda:0" if args['--cuda'] else "cpu")
+    device = xm.xla_device() if args['--cuda'] else torch.device("cpu")
     print('use device: %s' % device, file=sys.stderr)
 
     model = model.to(device)
@@ -297,7 +298,7 @@ def decode(args: Dict[str, str]):
     model = NMT.load(args['MODEL_PATH'])
 
     if args['--cuda']:
-        model = model.to(torch.device("cuda:0"))
+        model = model.to(xm.xla_device())
 
     hypotheses = beam_search(model, test_data_src,
                             #  beam_size=int(args['--beam-size']),                      
@@ -350,8 +351,8 @@ def main():
     # seed the random number generators
     seed = int(args['--seed'])
     torch.manual_seed(seed)
-    if args['--cuda']:
-        torch.cuda.manual_seed(seed)
+    # if args['--cuda']:
+    #     torch.cuda.manual_seed(seed)
     np.random.seed(seed * 13 // 7)
 
     if args['train']:

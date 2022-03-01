@@ -7,3 +7,6 @@ __pycache__
 /vocab.json
 
 /runs
+
+/model.bin
+/model.bin.optim

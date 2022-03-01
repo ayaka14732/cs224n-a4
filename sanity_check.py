@@ -247,7 +247,7 @@ def main():
     # Seed the Random Number Generators
     seed = 1234
     torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
+    # torch.cuda.manual_seed(seed)
     np.random.seed(seed * 13 // 7)
 
     # Load training data & vocabulary
