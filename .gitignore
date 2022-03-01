@@ -1,1 +1,9 @@
 __pycache__
+
+/src.model
+/src.vocab
+/tgt.model
+/tgt.vocab
+/vocab.json
+
+/runs
